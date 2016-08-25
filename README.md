@@ -1,4 +1,4 @@
-# StackedMultiBw
+# ProportionalMultiBw
 JBrowse plugin to display multiple BigWig tracks as a stacked proportion of depth.
 
 ## Why?

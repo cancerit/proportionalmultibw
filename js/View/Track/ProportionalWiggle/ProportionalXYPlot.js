@@ -25,6 +25,7 @@ function(
       return Util.deepUpdate(lang.clone(this.inherited(arguments)), {
         autoscale: 'local',
         maxRefFrac: 0.95,
+        yScalePosition: 'right',
         style: {
           origin_color: '#888'
         }
@@ -111,6 +112,7 @@ function(
 
         var stack = [];
         var depth;
+        var refBase;
         array.forEach(p, function(s) {
           if (!s) {
             return;
@@ -123,24 +125,36 @@ function(
             depth = score;
           }
           else {
-            if(score != 0) stack.push({'allele': source, 'raw': score, 'refBase': refBases[bIdx]});
+            if(score != 0) {
+              stack.push({'allele': source, 'raw': score});
+              if(refBase == null) refBase = refBases[bIdx];
+            }
           }
         }, this);
 
         if(scale >= 1) {
           var len = stack.length;
           if(stack.length > 0) {
-            // sort them by the raw value desc (or allele asc if equal)
-            stack.sort(function(a,b) {
-              if(a.raw === b.raw) {
-                if(a.allele < b.allele) return -1;
-                if(a.allele > b.allele) return 1;
-              }
-              return b.raw - a.raw;
-            });
+            // test if we should show based on ref base divergence
 
-            // test first in stack, only draw stack if below threshold
-            if(stack[0].raw < maxRefFrac && stack[0].allele === stack[0].refBase) {
+            var show = 0;
+            for(var j=0; j<stack.length; j++) {
+              if(stack[j].allele === refBase && stack[j].raw <= maxRefFrac) {
+                show = 1;
+                break;
+              }
+            }
+
+            if(show === 1) {
+              // sort them by the raw value desc (or allele asc if equal)
+              stack.sort(function(a,b) {
+                if(a.raw === b.raw) {
+                  if(a.allele < b.allele) return -1;
+                  if(a.allele > b.allele) return 1;
+                }
+                return b.raw - a.raw;
+              });
+
               var height = canvasHeight;
               for (var k = 0; k < len; k++) {
                 context.fillStyle = colors[stack[k].allele];

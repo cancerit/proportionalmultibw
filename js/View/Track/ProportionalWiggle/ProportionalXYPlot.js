@@ -1,173 +1,163 @@
 define([
-    'dojo/_base/declare',
-    'dojo/_base/array',
-    'dojo/_base/lang',
-    'dojo/_base/Color',
-    'dojo/on',
-    'ProportionalMultiBw/View/Track/ProportionalWiggleBase',
-    'JBrowse/View/Track/_YScaleMixin',
-    'JBrowse/Util',
-    'JBrowse/View/Track/Wiggle/_Scale'
+  'dojo/_base/declare',
+  'dojo/_base/array',
+  'dojo/_base/lang',
+  'dojo/_base/Color',
+  'dojo/on',
+  'ProportionalMultiBw/View/Track/ProportionalWiggleBase',
+  'JBrowse/View/Track/_YScaleMixin',
+  'JBrowse/Util',
+  'JBrowse/View/Track/Wiggle/_Scale'
 ],
 function(
-    declare,
-    array,
-    lang,
-    Color,
-    on,
-    WiggleBase,
-    YScaleMixin,
-    Util,
-    Scale
+  declare,
+  array,
+  lang,
+  Color,
+  on,
+  WiggleBase,
+  YScaleMixin,
+  Util,
+  Scale
 ) {
-    return declare([WiggleBase, YScaleMixin], {
-        _defaultConfig: function() {
-            return Util.deepUpdate(lang.clone(this.inherited(arguments)), {
-                autoscale: 'local',
-                style: {
-                    pos_color: 'blue',
-                    neg_color: 'red',
-                    origin_color: '#888',
-                    variance_band_color: 'rgba(0,0,0,0.3)'
-                }
-            });
-        },
-
-        _getScaling: function(viewArgs, successCallback, errorCallback) {
-            this._getScalingStats(viewArgs, dojo.hitch(this, function(stats) {
-                if (!this.lastScaling || !this.lastScaling.sameStats(stats) || this.trackHeightChanged) {
-                    var scaling = new Scale(this.config, stats);
-
-                    // bump minDisplayed to 0 if it is within 0.5% of it
-                    if (Math.abs(scaling.min / scaling.max) < 0.005) {
-                        scaling.min = 0;
-                    }
-
-                    // update our track y-scale to reflect it
-                    this.makeYScale({
-                        fixBounds: true,
-                        min: scaling.min,
-                        max: scaling.max
-                    });
-
-                    // and finally adjust the scaling to match the ruler's scale rounding
-                    scaling.min = this.ruler.scaler.bounds.lower;
-                    scaling.max = this.ruler.scaler.bounds.upper;
-                    scaling.range = scaling.max - scaling.min;
-
-                    this.lastScaling = scaling;
-                    this.trackHeightChanged = false; // reset flag
-                }
-
-                successCallback(this.lastScaling);
-            }), errorCallback);
-        },
-
-        updateStaticElements: function(coords) {
-            this.inherited(arguments);
-            this.updateYScaleFromViewDimensions(coords);
-        },
-
-        _drawFeatures: function(scale, leftBase, rightBase, block, canvas, pixels, dataScale) {
-            var thisB = this;
-            var context = canvas.getContext('2d');
-            var canvasHeight = canvas.height;
-
-            var ratio = Util.getResolution(context, this.browser.config.highResolutionMode);
-            var toY = lang.hitch(this, function(val) {
-                return canvasHeight * (1 - dataScale.normalize(val)) / ratio;
-            });
-            var originY = toY(dataScale.origin);
-            var map = {};
-
-            array.forEach(pixels, function(p, i) {
-                array.forEach(p, function(s) {
-                    if (!s) {
-                        return;
-                    }
-                    var score = toY(s.score);
-                    var f = s.feat;
-                    var source = f.get('source');
-                    var elt = {};
-                    for (var k = 0; k < this.labels.length; k++) {
-                        if (this.labels[k].name == f.get('source')) {
-                            elt = this.labels[k];
-                            break;
-                        }
-                    }
-                    var color = elt.color;
-                    var nonCont = elt.nonCont;
-                    if (score <= canvasHeight || score > originY) { // if the rectangle is visible at all
-                        if (score <= originY) {
-                            // bar goes upward
-                            if (nonCont) {
-                                context.fillStyle = color;
-                                var height = 1;
-                                if (elt.fill) {
-                                    height = originY - score + 1;
-                                }
-                                thisB._fillRectMod(context, i, score, 1, height);
-                            } else {
-                                context.strokeStyle = color;
-                                context.beginPath();
-                                var x = (map[source] || {}).x || i;
-                                var y = (map[source] || {}).y || score;
-                                if (i === x + 1) {
-                                    context.moveTo(x, y);
-                                    context.lineTo(i, score);
-                                } else if (i === x && i !== 0) {
-                                    context.moveTo(x - 1, canvasHeight);
-                                    context.lineTo(x, score);
-                                } else {
-                                    context.moveTo(x, y);
-                                    context.lineTo(x + 1, canvasHeight);
-                                    context.lineTo(i - 1, canvasHeight);
-                                    context.lineTo(i, score);
-                                }
-                                context.stroke();
-                                map[source] = {
-                                    x: i,
-                                    y: score
-                                };
-                            }
-                        } else {
-                            if (nonCont) {
-                                context.fillStyle = color;
-
-                                var top = score - 1;
-                                var heightm = 1;
-                                if (elt.fill) {
-                                    top = originY;
-                                    heightm = score - originY;
-                                }
-                                thisB._fillRectMod(context, i, top, 1,  heightm);
-                            } else {
-                                context.strokeStyle = color;
-                                context.beginPath();
-                                var x = (map[source] || {}).x || i;
-                                var y = (map[source] || {}).y || score;
-                                if (i === x + 1) {
-                                    context.moveTo(x, y);
-                                    context.lineTo(i, score);
-                                } else if (i === x && i !== 0) {
-                                    context.moveTo(x - 1, canvasHeight);
-                                    context.lineTo(x, score);
-                                } else {
-                                    context.moveTo(x, y);
-                                    context.lineTo(x + 1, canvasHeight);
-                                    context.lineTo(i - 1, canvasHeight);
-                                    context.lineTo(i, score);
-                                }
-                                context.stroke();
-                                map[source] = {
-                                    x: i,
-                                    y: score
-                                };
-                            }
-                        }
-                    }
-                }, this);
-            }, this);
+  return declare([WiggleBase, YScaleMixin], {
+    _defaultConfig: function() {
+      return Util.deepUpdate(lang.clone(this.inherited(arguments)), {
+        autoscale: 'local',
+        style: {
+          origin_color: '#888'
         }
-    });
+      });
+    },
+
+    _getScaling: function(viewArgs, successCallback, errorCallback) {
+      this._getScalingStats(viewArgs, dojo.hitch(this, function(stats) {
+        if (!this.lastScaling || !this.lastScaling.sameStats(stats) || this.trackHeightChanged) {
+          var scaling = new Scale(this.config, stats);
+
+          // bump minDisplayed to 0 if it is within 0.5% of it
+          if (Math.abs(scaling.min / scaling.max) < 0.005) {
+            scaling.min = 0;
+          }
+
+          // update our track y-scale to reflect it
+          this.makeYScale({
+            fixBounds: true,
+            min: scaling.min,
+            max: scaling.max
+          });
+
+          // and finally adjust the scaling to match the ruler's scale rounding
+          scaling.min = this.ruler.scaler.bounds.lower;
+          scaling.max = this.ruler.scaler.bounds.upper;
+          scaling.range = scaling.max - scaling.min;
+
+          this.lastScaling = scaling;
+          this.trackHeightChanged = false; // reset flag
+        }
+
+        successCallback(this.lastScaling);
+      }), errorCallback);
+    },
+
+    updateStaticElements: function(coords) {
+      this.inherited(arguments);
+      this.updateYScaleFromViewDimensions(coords);
+    },
+
+    _drawFeatures: function(scale, leftBase, rightBase, block, canvas, pixels, dataScale) {
+      var thisB = this;
+      var context = canvas.getContext('2d');
+      var canvasHeight = canvas.height;
+
+      var refBases = [];
+      thisB.browser.getStore('refseqs', function(refSeqStore) {
+        refSeqStore.getReferenceSequence(
+          { ref: thisB.refSeq.name, start: leftBase, end: rightBase},
+          dojo.hitch( this, function( seq ) {
+            refBases = seq.split('');
+          }),
+          // end callback
+          function() {},
+          // error callback
+          dojo.hitch( this, function() {
+            console.log(this);
+          })
+        );
+      });
+
+
+      var alleles = ['A','C','G','T'];
+      var maxRefFrac = thisB.config.maxRefFrac;
+
+      var ratio = Util.getResolution(context, this.browser.config.highResolutionMode);
+      var toY = lang.hitch(this, function(val) {
+        return canvasHeight * (1 - dataScale.normalize(val)) / ratio;
+      });
+      var originY = toY(dataScale.origin);
+
+      var colors = {};
+      var templates = this.config.urlTemplates;
+      for(var i=0; i<templates.length; i++) {
+        colors[templates[i].name] = templates[i].color;
+      }
+
+      var map = {};
+      var bIdx = -1;
+      array.forEach(pixels, function(p, i) {
+        // move along the refBases array
+        if(i % scale == 0) bIdx++;
+
+        var stack = [];
+        var depth;
+        array.forEach(p, function(s) {
+          if (!s) {
+            return;
+          }
+          var f = s.feat;
+          var source = f.get('source');
+          var score = s.score;
+
+          if(source === 'depth') {
+            depth = score;
+          }
+          else {
+            if(score != 0) stack.push({'allele': source, 'raw': score, 'refBase': refBases[bIdx]});
+          }
+        }, this);
+
+        if(scale >= 1) {
+          var len = stack.length;
+          if(stack.length > 0) {
+            // sort them by the raw value desc (or allele asc if equal)
+            stack.sort(function(a,b) {
+              if(a.raw === b.raw) {
+                if(a.allele < b.allele) return -1;
+                if(a.allele > b.allele) return 1;
+              }
+              return b.raw - a.raw;
+            });
+
+            // test first in stack, only draw stack if below threshold
+            if(stack[0].raw < maxRefFrac && stack[0].allele === stack[0].refBase) {
+              var height = canvasHeight;
+              for (var k = 0; k < len; k++) {
+                context.fillStyle = colors[stack[k].allele];
+                thisB._fillRectMod(context, i, 0, 1, height);
+                height -= Math.round(canvasHeight * stack[k].raw);
+              }
+            }
+          }
+        }
+        else {
+          console.log('ZOOM IN');
+        }
+
+        // line drawing
+        var score = toY(depth);
+        context.fillStyle = 'black';
+        thisB._fillRectMod(context, i, score, 1, 1);
+      }, this);
+    }
+  });
 });

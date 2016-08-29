@@ -17,6 +17,22 @@ function(
         constructor: function(args) {
             this.labels = args.config.urlTemplates;
         },
+
+    fillBlock: function( args ) {
+        var thisB = this;
+        this.heightUpdate( this._canvasHeight(), args.blockIndex );
+
+        // hook updateGraphs onto the end of the block feature fetch
+        var oldFinish = args.finishCallback || function() {};
+        args.finishCallback = function() {
+            thisB.updateGraphs( args, oldFinish );
+        };
+
+        // get the features for this block, and then set in motion the
+        // updating of the graphs
+        this._getBlockFeatures( args );
+    },
+
         _calculatePixelScores: function(canvasWidth, features, featureRects) {
             var pixelValues = new Array(canvasWidth);
             array.forEach(features, function(f, i) {

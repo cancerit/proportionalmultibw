@@ -25,6 +25,10 @@ function(
                 return new BigWig(dojo.mixin(args, { urlTemplate: urlTemplate.url, name: urlTemplate.name }));
             });
 
+            if(args.hasOwnProperty('depth')) {
+              this.stores.push(new BigWig(dojo.mixin(args, { urlTemplate: args.depth.urlTemplate, name: args.depth.name })));
+            }
+
             all(array.map(this.stores, function(store) {
                 return store._deferred.features;
             })).then(function() {

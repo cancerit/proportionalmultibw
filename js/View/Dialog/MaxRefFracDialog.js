@@ -17,10 +17,10 @@ function(
     ActionBarDialog
 ) {
     return declare(ActionBarDialog, {
-        title: 'Set max score',
+        title: 'Set max reference fraction',
 
         constructor: function(args) {
-            this.maxScore = args.maxScore || 0;
+            this.maxRefFrac = args.maxRefFrac || 0.95;
             this.browser         = args.browser;
             this.setCallback     = args.setCallback || function() {};
             this.cancelCallback  = args.cancelCallback || function() {};
@@ -49,17 +49,17 @@ function(
         },
 
         show: function(/* callback */) {
-            dojo.addClass(this.domNode, 'maxScoreDialog');
+            dojo.addClass(this.domNode, 'maxRefFracDialog');
 
             this.maxScoreSpinner = new NumberSpinner({
-                value: this.maxScore,
+                value: this.maxRefFrac,
                 smallDelta: 2
             });
 
             this.set('content', [
                 dom.create('label', { 'for': 'read_depth', innerHTML: '' }),
                 this.maxScoreSpinner.domNode,
-                dom.create('span', { innerHTML: ' max score' })
+                dom.create('span', { innerHTML: ' max ref frac' })
             ]);
 
             this.inherited(arguments);

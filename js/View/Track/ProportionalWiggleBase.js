@@ -3,14 +3,14 @@ define([
     'dojo/_base/array',
     'dojo/_base/lang',
     'JBrowse/View/Track/WiggleBase',
-//    'MultiBigWig/View/Dialog/MaxScoreDialog'
+    'ProportionalMultiBw/View/Dialog/MaxRefFracDialog'
 ],
 function(
     declare,
     array,
     lang,
     WiggleBase,
-    MaxScoreDialog
+    MaxRefFracDialog
 ) {
     return declare(WiggleBase, {
 
@@ -75,15 +75,15 @@ function(
                 }
             });
             options.push({
-                label: 'Set max score for global',
+                label: 'Set max reference fraction',
                 onClick: function() {
-                    new MaxScoreDialog({
+                    new MaxRefFracDialog({
                         setCallback: function(filterInt) {
-                            track.config.max_score = filterInt;
+                            track.config.maxRefFrac = filterInt;
                             track.config.autoscale = 'global';
                             track.browser.publish('/jbrowse/v1/c/tracks/replace', [track.config]);
                         },
-                        maxScore: track.config.max_score || 0
+                        maxRefFrac: track.config.maxRefFrac || 0.9
                     }).show();
                 }
             });

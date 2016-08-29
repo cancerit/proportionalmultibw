@@ -24,6 +24,7 @@ function(
     _defaultConfig: function() {
       return Util.deepUpdate(lang.clone(this.inherited(arguments)), {
         autoscale: 'local',
+        maxRefFrac: 0.95,
         style: {
           origin_color: '#888'
         }

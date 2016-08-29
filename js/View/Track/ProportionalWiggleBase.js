@@ -2,6 +2,10 @@ define([
     'dojo/_base/declare',
     'dojo/_base/array',
     'dojo/_base/lang',
+    'dojo/_base/event',
+    'dojo/dom-construct',
+    'dojo/on',
+    'dojo/mouse',
     'JBrowse/View/Track/WiggleBase',
     'ProportionalMultiBw/View/Dialog/MaxRefFracDialog'
 ],
@@ -9,6 +13,10 @@ function(
     declare,
     array,
     lang,
+    domEvent,
+    dom,
+    on,
+    mouse,
     WiggleBase,
     MaxRefFracDialog
 ) {
@@ -100,6 +108,67 @@ function(
                 ret = this.inherited(arguments);
             }
             return ret;
-        }
+        },
+        mouseover: function( bpX, evt ) {
+          // if( this._scoreDisplayHideTimeout )
+          //   window.clearTimeout( this._scoreDisplayHideTimeout );
+          if( bpX === undefined ) {
+            var thisB = this;
+            //this._scoreDisplayHideTimeout = window.setTimeout( function() {
+              thisB.scoreDisplay.flag.style.display = 'none';
+              thisB.scoreDisplay.pole.style.display = 'none';
+            //}, 1000 );
+          }
+          else {
+            var block;
+            array.some(this.blocks, function(b) {
+                     if( b && b.startBase <= bpX && b.endBase >= bpX ) {
+                       block = b;
+                       return true;
+                     }
+                     return false;
+                   });
+
+            if( !( block && block.canvas && block.pixelScores && evt ) )
+              return;
+
+            var pixelValues = block.pixelScores;
+            var canvas = block.canvas;
+            var cPos = dojo.position( canvas );
+            var x = evt.pageX;
+            var cx = evt.pageX - cPos.x;
+
+            if( this._showPixelValue( this.scoreDisplay.flag,  pixelValues[ Math.round( cx ) ]) ) {
+              this.scoreDisplay.flag.style.display = 'block';
+              this.scoreDisplay.pole.style.display = 'block';
+
+              this.scoreDisplay.flag.style.left = evt.clientX+'px';
+              this.scoreDisplay.flag.style.top  = cPos.y+'px';
+              this.scoreDisplay.pole.style.left = evt.clientX+'px';
+              this.scoreDisplay.pole.style.height = cPos.h+'px';
+            }
+
+          }
+        },
+        _showPixelValue: function( scoreDisplay, scores ) {
+          if(scores) {
+            var map = {};
+            for(var j=0; j<scores.length; j++) {
+              map[ scores[j].feat.data.source ] = parseFloat( scores[j].score.toPrecision(6) );
+            }
+            if(!map.hasOwnProperty('A')) map['A'] = 0;
+            if(!map.hasOwnProperty('C')) map['C'] = 0;
+            if(!map.hasOwnProperty('G')) map['G'] = 0;
+            if(!map.hasOwnProperty('T')) map['T'] = 0;
+
+            scoreDisplay.innerHTML = 'A: ' + map['A'] + ', ' +
+                                     'C: ' + map['C'] + ', ' +
+                                     'G: ' + map['G'] + ', ' +
+                                     'T: ' + map['T'] + ', ' +
+                                     'depth: ' + map['depth'];
+            return true;
+          }
+          return false;
+        },
     });
 });

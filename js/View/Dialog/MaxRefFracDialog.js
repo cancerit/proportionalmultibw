@@ -53,7 +53,8 @@ function(
 
             this.maxScoreSpinner = new NumberSpinner({
                 value: this.maxRefFrac,
-                smallDelta: 2
+                smallDelta: 0.01,
+                constraints: {min:0, max:1}
             });
 
             this.set('content', [

@@ -24,8 +24,9 @@ function(
     _defaultConfig: function() {
       return Util.deepUpdate(lang.clone(this.inherited(arguments)), {
         autoscale: 'local',
-        maxRefFrac: 0.95,
+        maxRefFrac: 0.9,
         yScalePosition: 'right',
+        scale: 'log',
         style: {
           origin_color: '#888'
         }
@@ -104,7 +105,7 @@ function(
         colors[templates[i].name] = templates[i].color;
       }
 
-      var map = {};
+      var lastXY = {};
       var bIdx = -1;
       array.forEach(pixels, function(p, i) {
         // move along the refBases array
@@ -171,7 +172,16 @@ function(
         // line drawing
         var score = toY(depth);
         context.fillStyle = 'black';
-        thisB._fillRectMod(context, i, score, 1, 1);
+
+        //thisB._fillRectMod(context, i, score, 1, 1);
+        context.beginPath();
+        if(lastXY.hasOwnProperty('x')) {
+          context.moveTo(lastXY.x, lastXY.y);
+          context.lineTo(i, score);
+          context.stroke();
+        }
+        lastXY = {x: i, y: score};
+
       }, this);
     }
   });

@@ -1,6 +1,39 @@
 # ProportionalMultiBw
 JBrowse plugin to display multiple BigWig tracks as a stacked proportion of depth.
 
+## ProportionalXYPlot
+![ProportionalXYPlot example image](img/XY.png)
+
+### Configuration
+
+```js
+{
+  "storeClass" : "ProportionalMultiBw/Store/SeqFeature/ProportionalMultiBw",
+  "type" : "ProportionalMultiBw/View/Track/ProportionalWiggle/ProportionalXYPlot",
+  "label" : "ProportionalMultiBw-XY",
+  "maxRefFrac": 0.9,
+  "depth" : {
+  "color" : "#000",
+  "urlTemplate" : "bw/PD26840a.bam.bw",
+  "name" : "depth"
+  },
+  "urlTemplates" : [
+    { "url" : "bw/A.PD26840a.bam.bw",
+      "name" : "A", "color" : "#00BF00"
+    },
+    { "url" : "bw/C.PD26840a.bam.bw",
+      "name" : "C", "color" : "#4747ff"
+    },
+    { "url" : "bw/G.PD26840a.bam.bw",
+      "name" : "G", "color" : "#d5bb04"
+    },
+    { "url" : "bw/T.PD26840a.bam.bw",
+      "name" : "T", "color" : "#f00"
+    }
+  ]
+}
+```
+
 ## Why?
 Over the last few years it has been common to generate whole genome sequencing (WGS) data
 around 30-50x deep.  Even standard whole exome sequencing (WXS) is rarely over 100x and

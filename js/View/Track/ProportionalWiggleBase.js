@@ -143,7 +143,7 @@ function(
               this.scoreDisplay.pole.style.display = 'block';
 
               this.scoreDisplay.flag.style.left = evt.clientX+'px';
-              this.scoreDisplay.flag.style.top  = cPos.y+'px';
+              this.scoreDisplay.flag.style.top  = parseInt(cPos.y + (canvas.height/2))+'px';
               this.scoreDisplay.pole.style.left = evt.clientX+'px';
               this.scoreDisplay.pole.style.height = cPos.h+'px';
             }

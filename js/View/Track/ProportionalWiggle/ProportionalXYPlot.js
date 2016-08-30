@@ -26,7 +26,7 @@ function(
         autoscale: 'local',
         maxRefFrac: 0.9,
         yScalePosition: 'right',
-        scale: 'log',
+        scale: 'linear',
         style: {
           origin_color: '#888'
         }
@@ -96,7 +96,6 @@ function(
         );
       });
 
-
       var alleles = ['A','C','G','T'];
       var maxRefFrac = thisB.config.maxRefFrac;
 
@@ -113,14 +112,15 @@ function(
       }
 
       var lastXY = {};
-      var bIdx = -1;
+      var bIdx = 0;
+      var refBase;
       array.forEach(pixels, function(p, i) {
-        // move along the refBases array
-        if(i % scale == 0) bIdx++;
+        // move along the refBases array, handle fractions in scale
+        if(i % parseInt(scale+0.5) == 0) refBase = refBases[bIdx++];
 
         var stack = [];
         var depth;
-        var refBase;
+
         array.forEach(p, function(s) {
           if (!s) {
             return;
@@ -135,7 +135,6 @@ function(
           else {
             if(scale >= 1) {
               stack.push({'allele': source, 'raw': score});
-              if(refBase == null) refBase = refBases[bIdx];
             }
           }
         }, this);
@@ -143,7 +142,6 @@ function(
         var len = stack.length;
         if(stack.length > 0) {
           // test if we should show based on ref base divergence
-
           var show = 0;
           for(var j=0; j<stack.length; j++) {
             if(stack[j].allele === refBase && stack[j].raw <= maxRefFrac) {

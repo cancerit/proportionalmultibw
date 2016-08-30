@@ -96,6 +96,8 @@ function(
         );
       });
 
+console.log(scale);
+
       var alleles = ['A','C','G','T'];
       var maxRefFrac = thisB.config.maxRefFrac;
 
@@ -114,13 +116,15 @@ function(
       var lastXY = {};
       var bIdx = 0;
       var refBase;
+      // iterate over pixels (scale pixels per base)
       array.forEach(pixels, function(p, i) {
-        // move along the refBases array, handle fractions in scale
-        if(i % parseInt(scale+0.5) == 0) refBase = refBases[bIdx++];
+        // move along the refBases array
+        if(i % scale === 0) refBase = refBases[bIdx++];
 
         var stack = [];
         var depth;
 
+        // iterate over stores
         array.forEach(p, function(s) {
           if (!s) {
             return;

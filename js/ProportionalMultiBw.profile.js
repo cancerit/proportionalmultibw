@@ -13,7 +13,7 @@ var profile = {
 
     basePath: '../../../src',
     packages: [
-        {name: 'StackedMultiBw', location: '../plugins/StackedMultiBw/js' }
+        {name: 'ProportionalMultiBw', location: '../plugins/ProportionalMultiBw/js' }
     ],
 
     layerOptimize: 'closure',
@@ -21,9 +21,9 @@ var profile = {
     selectorEngine: 'acme',
 
     layers: {
-        'StackedMultiBw/main': {
+        'ProportionalMultiBw/main': {
             include: [
-                'StackedMultiBw'
+                'ProportionalMultiBw'
             ],
             exclude: ['JBrowse']
         }
@@ -56,7 +56,7 @@ var profile = {
 
         // Files that should not be copied when the “mini” compiler flag is set to true.
         miniExclude: function(filename, mid) {
-            return !(/^StackedMultiBw/.test(mid));
+            return !(/^ProportionalMultiBw/.test(mid));
         }
     }
 };

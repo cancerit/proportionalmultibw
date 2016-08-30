@@ -96,8 +96,6 @@ function(
         );
       });
 
-console.log(scale);
-
       var alleles = ['A','C','G','T'];
       var maxRefFrac = thisB.config.maxRefFrac;
 

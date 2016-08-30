@@ -23,3 +23,7 @@ div.track-sublabel.last {
     margin: 5px;
     border: 1px solid rgba(0, 0, 0, .2);
 }
+
+.tooltip-inner {
+    white-space: pre-wrap;
+}

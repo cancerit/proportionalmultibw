@@ -159,31 +159,34 @@ function(
             var map = {};
             for(var j=0; j<scores.length; j++) {
               if(scores[j].feat.data.source === 'depth') {
-                map[ scores[j].feat.data.source ] = scores[j].score;
+                map[ scores[j].feat.data.source ] = this.pad(scores[j].score, ' ', 5);
               }
               else {
-                map[ scores[j].feat.data.source ] = parseFloat( scores[j].score*100 ).toFixed(2);
+                map[ scores[j].feat.data.source ] = this.pad(parseFloat( scores[j].score*100 ).toFixed(2), ' ', 5);
               }
             }
             if(scale < 1) {
-              scoreDisplay.innerHTML = 'depth: ' + map['depth'];
+              scoreDisplay.innerHTML = 'Depth: ' + map['depth'];
             }
             else {
-              if(!map.hasOwnProperty('A')) map['A'] = 0;
-              if(!map.hasOwnProperty('C')) map['C'] = 0;
-              if(!map.hasOwnProperty('G')) map['G'] = 0;
-              if(!map.hasOwnProperty('T')) map['T'] = 0;
+              if(!map.hasOwnProperty('A')) map['A'] = ' 0.00%';
+              if(!map.hasOwnProperty('C')) map['C'] = ' 0.00%';
+              if(!map.hasOwnProperty('G')) map['G'] = ' 0.00%';
+              if(!map.hasOwnProperty('T')) map['T'] = ' 0.00%';
 
               scoreDisplay.style.cssText = scoreDisplay.style.cssText + ' white-space: pre-wrap;'
-              scoreDisplay.innerHTML = 'depth: ' + map['depth'] + '\n' +
-                                       'A: ' + map['A'] + '%\n' +
-                                       'C: ' + map['C'] + '%\n' +
-                                       'G: ' + map['G'] + '%\n' +
-                                       'T: ' + map['T'] + '%';
+              scoreDisplay.innerHTML = 'Depth: ' + map['depth'] + '\n' +
+                                       '    A: ' + map['A'] + '%\n' +
+                                       '    C: ' + map['C'] + '%\n' +
+                                       '    G: ' + map['G'] + '%\n' +
+                                       '    T: ' + map['T'] + '%';
             }
             return true;
           }
           return false;
+        },
+        pad: function(value, pval, length) {
+          return (value.toString().length < length) ? this.pad(pval+value, pval, length):value;
         },
     });
 });

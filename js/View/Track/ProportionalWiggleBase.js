@@ -158,7 +158,12 @@ function(
             }
             var map = {};
             for(var j=0; j<scores.length; j++) {
-              map[ scores[j].feat.data.source ] = parseFloat( scores[j].score.toPrecision(6) );
+              if(scores[j].feat.data.source === 'depth') {
+                map[ scores[j].feat.data.source ] = scores[j].score;
+              }
+              else {
+                map[ scores[j].feat.data.source ] = parseFloat( scores[j].score*100 ).toFixed(2);
+              }
             }
             if(scale < 1) {
               scoreDisplay.innerHTML = 'depth: ' + map['depth'];
@@ -169,11 +174,12 @@ function(
               if(!map.hasOwnProperty('G')) map['G'] = 0;
               if(!map.hasOwnProperty('T')) map['T'] = 0;
 
-              scoreDisplay.innerHTML = 'depth: ' + map['depth'] + ', ' +
-                                       'A: ' + map['A'] + ', ' +
-                                       'C: ' + map['C'] + ', ' +
-                                       'G: ' + map['G'] + ', ' +
-                                       'T: ' + map['T'];
+              scoreDisplay.style.cssText = scoreDisplay.style.cssText + ' white-space: pre-wrap;'
+              scoreDisplay.innerHTML = 'depth: ' + map['depth'] + '\n' +
+                                       'A: ' + map['A'] + '%\n' +
+                                       'C: ' + map['C'] + '%\n' +
+                                       'G: ' + map['G'] + '%\n' +
+                                       'T: ' + map['T'] + '%';
             }
             return true;
           }

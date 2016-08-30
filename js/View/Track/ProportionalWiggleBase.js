@@ -110,14 +110,10 @@ function(
             return ret;
         },
         mouseover: function( bpX, evt ) {
-          // if( this._scoreDisplayHideTimeout )
-          //   window.clearTimeout( this._scoreDisplayHideTimeout );
-          if( bpX === undefined ) {
+          if( bpX === undefined) {
             var thisB = this;
-            //this._scoreDisplayHideTimeout = window.setTimeout( function() {
               thisB.scoreDisplay.flag.style.display = 'none';
               thisB.scoreDisplay.pole.style.display = 'none';
-            //}, 1000 );
           }
           else {
             var block;
@@ -152,20 +148,33 @@ function(
         },
         _showPixelValue: function( scoreDisplay, scores ) {
           if(scores) {
+            // don't do alleles when zoomed out
+            var scale;
+            for(var j=0; this.blocks.length; j++) {
+              if(this.blocks[j] != null && this.blocks[j].hasOwnProperty('scale')) {
+                scale = this.blocks[j].scale;
+                break;
+              }
+            }
             var map = {};
             for(var j=0; j<scores.length; j++) {
               map[ scores[j].feat.data.source ] = parseFloat( scores[j].score.toPrecision(6) );
             }
-            if(!map.hasOwnProperty('A')) map['A'] = 0;
-            if(!map.hasOwnProperty('C')) map['C'] = 0;
-            if(!map.hasOwnProperty('G')) map['G'] = 0;
-            if(!map.hasOwnProperty('T')) map['T'] = 0;
+            if(scale < 1) {
+              scoreDisplay.innerHTML = 'depth: ' + map['depth'];
+            }
+            else {
+              if(!map.hasOwnProperty('A')) map['A'] = 0;
+              if(!map.hasOwnProperty('C')) map['C'] = 0;
+              if(!map.hasOwnProperty('G')) map['G'] = 0;
+              if(!map.hasOwnProperty('T')) map['T'] = 0;
 
-            scoreDisplay.innerHTML = 'A: ' + map['A'] + ', ' +
-                                     'C: ' + map['C'] + ', ' +
-                                     'G: ' + map['G'] + ', ' +
-                                     'T: ' + map['T'] + ', ' +
-                                     'depth: ' + map['depth'];
+              scoreDisplay.innerHTML = 'depth: ' + map['depth'] + ', ' +
+                                       'A: ' + map['A'] + ', ' +
+                                       'C: ' + map['C'] + ', ' +
+                                       'G: ' + map['G'] + ', ' +
+                                       'T: ' + map['T'];
+            }
             return true;
           }
           return false;

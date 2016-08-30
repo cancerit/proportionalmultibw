@@ -71,7 +71,14 @@ function(
     _drawFeatures: function(scale, leftBase, rightBase, block, canvas, pixels, dataScale) {
       var thisB = this;
       var context = canvas.getContext('2d');
+      var bConfig = this.browser.config;
       var canvasHeight = canvas.height;
+
+      if(scale < 1) {
+        var background = new Image();
+        background.src = bConfig.baseUrl + bConfig.plugins.ProportionalMultiBw.location + '/img/zoom_in.png';
+        context.drawImage(background,0,parseInt((canvasHeight/2)-10));
+      }
 
       var refBases = [];
       thisB.browser.getStore('refseqs', function(refSeqStore) {
@@ -93,7 +100,7 @@ function(
       var alleles = ['A','C','G','T'];
       var maxRefFrac = thisB.config.maxRefFrac;
 
-      var ratio = Util.getResolution(context, this.browser.config.highResolutionMode);
+      var ratio = Util.getResolution(context, bConfig.highResolutionMode);
       var toY = lang.hitch(this, function(val) {
         return canvasHeight * (1 - dataScale.normalize(val)) / ratio;
       });
@@ -126,47 +133,42 @@ function(
             depth = score;
           }
           else {
-            if(score != 0) {
+            if(scale >= 1) {
               stack.push({'allele': source, 'raw': score});
               if(refBase == null) refBase = refBases[bIdx];
             }
           }
         }, this);
 
-        if(scale >= 1) {
-          var len = stack.length;
-          if(stack.length > 0) {
-            // test if we should show based on ref base divergence
+        var len = stack.length;
+        if(stack.length > 0) {
+          // test if we should show based on ref base divergence
 
-            var show = 0;
-            for(var j=0; j<stack.length; j++) {
-              if(stack[j].allele === refBase && stack[j].raw <= maxRefFrac) {
-                show = 1;
-                break;
-              }
-            }
-
-            if(show === 1) {
-              // sort them by the raw value desc (or allele asc if equal)
-              stack.sort(function(a,b) {
-                if(a.raw === b.raw) {
-                  if(a.allele < b.allele) return -1;
-                  if(a.allele > b.allele) return 1;
-                }
-                return b.raw - a.raw;
-              });
-
-              var height = canvasHeight;
-              for (var k = 0; k < len; k++) {
-                context.fillStyle = colors[stack[k].allele];
-                thisB._fillRectMod(context, i, 0, 1, height);
-                height -= Math.round(canvasHeight * stack[k].raw);
-              }
+          var show = 0;
+          for(var j=0; j<stack.length; j++) {
+            if(stack[j].allele === refBase && stack[j].raw <= maxRefFrac) {
+              show = 1;
+              break;
             }
           }
-        }
-        else {
-          console.log('ZOOM IN');
+
+          if(show === 1) {
+            // sort them by the raw value desc (or allele asc if equal)
+            stack.sort(function(a,b) {
+              if(a.raw === b.raw) {
+                if(a.allele < b.allele) return -1;
+                if(a.allele > b.allele) return 1;
+              }
+              return b.raw - a.raw;
+            });
+
+            var height = canvasHeight;
+            for (var k = 0; k < len; k++) {
+              context.fillStyle = colors[stack[k].allele];
+              thisB._fillRectMod(context, i, 0, 1, height);
+              height -= Math.round(canvasHeight * stack[k].raw);
+            }
+          }
         }
 
         // line drawing

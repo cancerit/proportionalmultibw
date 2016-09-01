@@ -24,6 +24,9 @@ function(
 
         constructor: function(args) {
             this.labels = args.config.urlTemplates;
+            if(args.config.hasOwnProperty('depth')) {
+              this.labels.push(args.config.depth);
+            }
         },
 
     fillBlock: function( args ) {
@@ -42,16 +45,19 @@ function(
     },
 
         _calculatePixelScores: function(canvasWidth, features, featureRects) {
+
+            var nameMap = {};
+            for (var k = 0; k < this.labels.length; k++) {
+              nameMap[this.labels[k].name] = k;
+            }
+            var pxPerBp = this.browser.view.pxPerBp;
             var pixelValues = new Array(canvasWidth);
             array.forEach(features, function(f, i) {
+                if(pxPerBp < 1 && f.get('source') !== 'depth') return;
+                var k = nameMap[f.get('source')];
                 var fRect = featureRects[i];
                 var jEnd = fRect.r;
                 var score = f.get('score');
-                for (var k = 0; k < this.labels.length; k++) {
-                    if (this.labels[k].name === f.get('source')) {
-                        break;
-                    }
-                }
                 for (var j = Math.round(fRect.l); j < jEnd; j++) {
                     if (!pixelValues[j]) {
                         pixelValues[j] = new Array(this.labels.length);
@@ -158,6 +164,7 @@ function(
             }
             var map = {};
             for(var j=0; j<scores.length; j++) {
+              if(scores[j] == null) continue;
               if(scores[j].feat.data.source === 'depth') {
                 map[ scores[j].feat.data.source ] = this.pad(scores[j].score, ' ', 5);
               }

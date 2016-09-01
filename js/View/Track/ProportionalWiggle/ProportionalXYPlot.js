@@ -119,9 +119,7 @@ function(
                   depth = score;
                 }
                 else {
-                  if(scale >= 1) {
-                    stack.push({'allele': source, 'raw': score, 'refBase': refBases[f.get('start') - leftBase]});
-                  }
+                  stack.push({'allele': source, 'raw': score, 'refBase': refBases[f.get('start') - leftBase]});
                 }
               }, this);
 

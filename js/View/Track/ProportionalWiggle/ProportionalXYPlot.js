@@ -73,6 +73,7 @@ function(
       var context = canvas.getContext('2d');
       var bConfig = this.browser.config;
       var canvasHeight = canvas.height;
+      var lineColor = thisB.config.counts.color;
 
       if(scale < 1) {
         var background = new Image();
@@ -161,7 +162,7 @@ function(
 
               // line drawing
               var score = toY(counts);
-              context.fillStyle = 'black';
+              context.strokeStyle = lineColor;
 
               context.beginPath();
               if(lastXY.hasOwnProperty('x')) {

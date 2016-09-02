@@ -22,11 +22,11 @@ function(
         constructor: function(args) {
             var thisB = this;
             this.stores = array.map(args.urlTemplates, function(urlTemplate) {
-                return new BigWig(dojo.mixin(args, { urlTemplate: urlTemplate.url, name: urlTemplate.name }));
+                return new BigWig(dojo.mixin(args, { urlTemplate: urlTemplate.url, name: urlTemplate.name}));
             });
 
-            if(args.hasOwnProperty('depth')) {
-              this.stores.push(new BigWig(dojo.mixin(args, { urlTemplate: args.depth.urlTemplate, name: args.depth.name })));
+            if(args.hasOwnProperty('counts')) {
+              this.stores.push(new BigWig(dojo.mixin(args, { urlTemplate: args.counts.urlTemplate, name: 'counts', key: args.counts.key })));
             }
 
             all(array.map(this.stores, function(store) {

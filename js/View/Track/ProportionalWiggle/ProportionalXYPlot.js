@@ -81,6 +81,7 @@ function(
       }
 
       var refBases = [];
+      var matchRef = this.config.matchRef || false;
       thisB.browser.getStore('refseqs', function(refSeqStore) {
         refSeqStore.getReferenceSequence(
           { ref: thisB.refSeq.name, start: leftBase, end: rightBase},
@@ -105,7 +106,7 @@ function(
             // iterate over pixels (scale pixels per base)
             array.forEach(pixels, function(p, i) {
               var stack = [];
-              var depth;
+              var counts;
               // iterate over stores
               array.forEach(p, function(s) {
                 if (!s) {
@@ -115,8 +116,8 @@ function(
                 var source = f.get('source');
                 var score = s.score;
 
-                if(source === 'depth') {
-                  depth = score;
+                if(source === 'counts') {
+                  counts = score;
                 }
                 else {
                   stack.push({'allele': source, 'raw': score, 'refBase': refBases[f.get('start') - leftBase]});
@@ -126,15 +127,20 @@ function(
               var len = stack.length;
               if(stack.length > 0) {
                 // test if we should show based on ref base divergence
-                var show = 0;
+                var show = false;
+                if(matchRef) {
                 for(var j=0; j<stack.length; j++) {
                   if(stack[j].allele === stack[j].refBase && stack[j].raw <= maxRefFrac) {
-                    show = 1;
+                    show = true;
                     break;
                   }
                 }
+                }
+                else {
+                  show = true;
+                }
 
-                if(show === 1) {
+                if(show) {
                   // sort them by the raw value desc (or allele asc if equal)
                   stack.sort(function(a,b) {
                     if(a.raw === b.raw) {
@@ -154,7 +160,7 @@ function(
               }
 
               // line drawing
-              var score = toY(depth);
+              var score = toY(counts);
               context.fillStyle = 'black';
 
               context.beginPath();

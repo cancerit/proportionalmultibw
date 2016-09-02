@@ -24,8 +24,8 @@ function(
 
         constructor: function(args) {
             this.labels = args.config.urlTemplates;
-            if(args.config.hasOwnProperty('depth')) {
-              this.labels.push(args.config.depth);
+            if(args.config.hasOwnProperty('counts')) {
+              this.labels.push(args.config.counts);
             }
         },
 
@@ -53,7 +53,7 @@ function(
             var pxPerBp = this.browser.view.pxPerBp;
             var pixelValues = new Array(canvasWidth);
             array.forEach(features, function(f, i) {
-                if(pxPerBp < 1 && f.get('source') !== 'depth') return;
+                if(pxPerBp < 1 && f.get('source') !== 'counts') return;
                 var k = nameMap[f.get('source')];
                 var fRect = featureRects[i];
                 var jEnd = fRect.r;
@@ -154,6 +154,8 @@ function(
         },
         _showPixelValue: function( scoreDisplay, scores ) {
           if(scores) {
+            var labels = this.config.labels;
+
             // don't do alleles when zoomed out
             var scale;
             for(var j=0; this.blocks.length; j++) {
@@ -165,28 +167,33 @@ function(
             var map = {};
             for(var j=0; j<scores.length; j++) {
               if(scores[j] == null) continue;
-              if(scores[j].feat.data.source === 'depth') {
+              if(scores[j].feat.data.source === 'counts') {
                 map[ scores[j].feat.data.source ] = this.pad(scores[j].score, ' ', 5);
               }
               else {
                 map[ scores[j].feat.data.source ] = this.pad(parseFloat( scores[j].score*100 ).toFixed(2), ' ', 5);
               }
             }
+
+            var countLabel = 'counts';
+            if(labels.hasOwnProperty('counts')) countLabel = labels['counts'];
+
             if(scale < 1) {
-              scoreDisplay.innerHTML = 'Depth: ' + map['depth'];
+              scoreDisplay.innerHTML = countLabel + ': ' + map['counts'];
             }
             else {
-              if(!map.hasOwnProperty('A')) map['A'] = ' 0.00%';
-              if(!map.hasOwnProperty('C')) map['C'] = ' 0.00%';
-              if(!map.hasOwnProperty('G')) map['G'] = ' 0.00%';
-              if(!map.hasOwnProperty('T')) map['T'] = ' 0.00%';
 
               scoreDisplay.style.cssText = scoreDisplay.style.cssText + ' white-space: pre-wrap;'
-              scoreDisplay.innerHTML = 'Depth: ' + map['depth'] + '\n' +
-                                       '    A: ' + map['A'] + '%\n' +
-                                       '    C: ' + map['C'] + '%\n' +
-                                       '    G: ' + map['G'] + '%\n' +
-                                       '    T: ' + map['T'] + '%';
+              scoreDisplay.innerHTML = countLabel + ': ' + map['counts'];
+
+              var keys = Object.keys(map).sort();
+              for(var k=0; k<keys.length; k++) {
+                var key = keys[k];
+                if(key === 'counts') continue;
+                var display = key;
+                if(labels.hasOwnProperty(key)) display = labels[key];
+                scoreDisplay.innerHTML +=  '\n' + this.pad(display, ' ', 5) + ': ' + map[key];
+              }
             }
             return true;
           }

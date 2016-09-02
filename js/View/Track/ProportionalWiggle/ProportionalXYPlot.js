@@ -25,6 +25,7 @@ function(
       return Util.deepUpdate(lang.clone(this.inherited(arguments)), {
         autoscale: 'local',
         maxRefFrac: 0.9,
+        matchRef: true,
         yScalePosition: 'right',
         scale: 'linear',
         style: {
@@ -130,12 +131,12 @@ function(
                 // test if we should show based on ref base divergence
                 var show = false;
                 if(matchRef) {
-                for(var j=0; j<stack.length; j++) {
-                  if(stack[j].allele === stack[j].refBase && stack[j].raw <= maxRefFrac) {
-                    show = true;
-                    break;
+                  for(var j=0; j<stack.length; j++) {
+                    if(stack[j].allele === stack[j].refBase && stack[j].raw <= maxRefFrac) {
+                      show = true;
+                      break;
+                    }
                   }
-                }
                 }
                 else {
                   show = true;

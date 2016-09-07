@@ -1,0 +1,67 @@
+{
+   "plugins" : [
+      "ProportionalMultiBw",
+      "HideTrackLabels"
+   ],
+   "tracks" : [
+      {
+         "seqType" : "dna",
+         "key" : "Reference sequence",
+         "storeClass" : "JBrowse/Store/Sequence/StaticChunked",
+         "chunkSize" : 20000,
+         "urlTemplate" : "seq/{refseq_dirpath}/{refseq}-",
+         "label" : "DNA",
+         "type" : "SequenceTrack",
+         "category" : "Reference sequence"
+      },
+      {
+        "maxExportSpan": 500000,
+        "autoscale": "local",
+        "logScaleOption": true,
+        "maxRefFrac": 0.9,
+        "matchRef": true,
+        "yScalePosition": "right",
+        "scale": "linear",
+        "style": {
+          "origin_color": "#888",
+          "height": 100
+        },
+        "labels": {
+          "counts": "Depth"
+        },
+        "counts": {
+          "name": "counts",
+          "color": "black",
+          "urlTemplate": "volvox-proportionalMultiBw.bw"
+        },
+        "type": "ProportionalMultiBw/View/Track/ProportionalWiggle/ProportionalXYPlot",
+        "label": "ProportionalMultiBw-XY",
+        "storeClass": "ProportionalMultiBw/Store/SeqFeature/ProportionalMultiBw",
+        "urlTemplates": [
+          {
+            "color": "#00BF00",
+            "url": "A.volvox-proportionalMultiBw.bw",
+            "name": "A"
+          },
+          {
+            "color": "#4747ff",
+            "url": "C.volvox-proportionalMultiBw.bw",
+            "name": "C"
+          },
+          {
+            "name": "G",
+            "url": "G.volvox-proportionalMultiBw.bw",
+            "color": "#d5bb04"
+          },
+          {
+            "url": "T.volvox-proportionalMultiBw.bw",
+            "name": "T",
+            "color": "#f00"
+          }
+        ],
+        "showTooltips": true,
+        "metadata": {}
+      }
+   ],
+   "formatVersion" : 1
+}

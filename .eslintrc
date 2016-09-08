@@ -1,11 +1,10 @@
 {
-  "extends": "eslint-config-airbnb-es5",
   "rules": {
     "no-var": 0,
     "no-console": 0,
     "space-in-parens": ["error", "never"],
     "object-shorthand": 0,
-    "indent": ["error", 4],
+    "indent": ["error", 2],
     "max-len": ["error", 200, 4],
     "vars-on-top": 0,
     "no-unused-vars": [2, {"varsIgnorePattern": "profile"}],

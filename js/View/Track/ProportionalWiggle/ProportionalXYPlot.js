@@ -40,9 +40,7 @@ function(
           var scaling = new Scale(this.config, stats);
 
           // bump minDisplayed to 0 if it is within 0.5% of it
-          if (Math.abs(scaling.min / scaling.max) < 0.005) {
-            scaling.min = 0;
-          }
+          if (Math.abs(scaling.min / scaling.max) < 0.005) scaling.min = 0;
 
           // update our track y-scale to reflect it
           this.makeYScale({
@@ -86,101 +84,99 @@ function(
       var matchRef = this.config.matchRef || false;
       thisB.browser.getStore('refseqs', function(refSeqStore) {
         refSeqStore.getReferenceSequence(
-          { ref: thisB.refSeq.name, start: leftBase, end: rightBase},
-          dojo.hitch( this, function( seq ) {
-            refBases = seq.split('');
-            // the moved bit starts here
-            var maxRefFrac = thisB.config.maxRefFrac;
+            { ref: thisB.refSeq.name, start: leftBase, end: rightBase},
+            dojo.hitch(this, function(seq) {
+              refBases = seq.split('');
+              // the moved bit starts here
+              var maxRefFrac = thisB.config.maxRefFrac;
 
-            var ratio = Util.getResolution(context, bConfig.highResolutionMode);
-            var toY = lang.hitch(this, function(val) {
-              return canvasHeight * (1 - dataScale.normalize(val)) / ratio;
-            });
-            var originY = toY(dataScale.origin);
+              var ratio = Util.getResolution(context, bConfig.highResolutionMode);
+              var toY = lang.hitch(this, function(val) {
+                return canvasHeight * (1 - dataScale.normalize(val)) / ratio;
+              });
 
-            var colors = {};
-            var templates = thisB.config.urlTemplates;
-            for(var i=0; i<templates.length; i++) {
-              colors[templates[i].name] = templates[i].color;
-            }
+              var colors = {};
+              var templates = thisB.config.urlTemplates;
+              for(var i=0; i<templates.length; i++) {
+                colors[templates[i].name] = templates[i].color;
+              }
 
-            var lastXY = {};
-            // iterate over pixels (scale pixels per base)
-            array.forEach(pixels, function(p, i) {
-              var stack = [];
-              var counts;
-              // iterate over stores
-              array.forEach(p, function(s) {
-                if (!s) {
-                  return;
+              var lastXY = {};
+              // iterate over pixels (scale pixels per base)
+              array.forEach(pixels, function(p, i) {
+                var stack = [];
+                var counts;
+                // iterate over stores
+                array.forEach(p, function(s) {
+                  if (!s) return;
+
+                  var f = s.feat;
+                  var source = f.get('source');
+                  var score = s.score;
+
+                  if(source === 'counts') {
+                    counts = score;
+                  }
+                  else {
+                    stack.push({'allele': source, 'raw': score, 'refBase': refBases[f.get('start') - leftBase]});
+                  }
+                }, this);
+
+                var len = stack.length;
+                if(stack.length > 0) {
+                  // test if we should show based on ref base divergence
+                  var show = false;
+                  if(matchRef) {
+                    for(var j=0; j<stack.length; j++) {
+                      if(stack[j].allele === stack[j].refBase && stack[j].raw <= maxRefFrac) {
+                        show = true;
+                        break;
+                      }
+                    }
+                  }
+                  else {
+                    show = true;
+                  }
+
+                  if(show) {
+                    // sort them by the raw value desc (or allele asc if equal)
+                    stack.sort(function(a,b) {
+                      if(a.raw === b.raw) {
+                        if(a.allele < b.allele) return -1;
+                        if(a.allele > b.allele) return 1;
+                      }
+                      return b.raw - a.raw;
+                    });
+
+                    var height = canvasHeight;
+                    for (var k = 0; k < len; k++) {
+                      context.fillStyle = colors[stack[k].allele];
+                      thisB._fillRectMod(context, i, 0, 1, height);
+                      height -= Math.round(canvasHeight * stack[k].raw);
+                    }
+                  }
                 }
-                var f = s.feat;
-                var source = f.get('source');
-                var score = s.score;
 
-                if(source === 'counts') {
-                  counts = score;
+                // line drawing
+                var score = toY(counts);
+                context.strokeStyle = lineColor;
+
+                context.beginPath();
+                if(lastXY.hasOwnProperty('x')) {
+                  context.moveTo(lastXY.x, lastXY.y);
+                  context.lineTo(i, score);
+                  context.stroke();
                 }
-                else {
-                  stack.push({'allele': source, 'raw': score, 'refBase': refBases[f.get('start') - leftBase]});
-                }
+                lastXY = {x: i, y: score};
+
               }, this);
-
-              var len = stack.length;
-              if(stack.length > 0) {
-                // test if we should show based on ref base divergence
-                var show = false;
-                if(matchRef) {
-                  for(var j=0; j<stack.length; j++) {
-                    if(stack[j].allele === stack[j].refBase && stack[j].raw <= maxRefFrac) {
-                      show = true;
-                      break;
-                    }
-                  }
-                }
-                else {
-                  show = true;
-                }
-
-                if(show) {
-                  // sort them by the raw value desc (or allele asc if equal)
-                  stack.sort(function(a,b) {
-                    if(a.raw === b.raw) {
-                      if(a.allele < b.allele) return -1;
-                      if(a.allele > b.allele) return 1;
-                    }
-                    return b.raw - a.raw;
-                  });
-
-                  var height = canvasHeight;
-                  for (var k = 0; k < len; k++) {
-                    context.fillStyle = colors[stack[k].allele];
-                    thisB._fillRectMod(context, i, 0, 1, height);
-                    height -= Math.round(canvasHeight * stack[k].raw);
-                  }
-                }
-              }
-
-              // line drawing
-              var score = toY(counts);
-              context.strokeStyle = lineColor;
-
-              context.beginPath();
-              if(lastXY.hasOwnProperty('x')) {
-                context.moveTo(lastXY.x, lastXY.y);
-                context.lineTo(i, score);
-                context.stroke();
-              }
-              lastXY = {x: i, y: score};
-
-            }, this);
-          }),
-          // end callback
-          function() {},
-          // error callback
-          dojo.hitch( this, function() {
-            console.log(this);
-          })
+            }),
+            // end callback
+            function() {},
+            // error callback
+            dojo.hitch(this, function() {
+              console.log(this);
+            })
         );
       });
 

@@ -79,17 +79,25 @@ function(
             expect(store).toBeTruthy();
         });
 
-        it('get bigwig values', function() {
-            var a_a = array.filter(features, function(f) { return f.get('score')>0&&f.get('source')=="A"; })
-            var a_c = array.filter(features, function(f) { return f.get('score')>0&&f.get('source')=="C"; })
-            var a_g = array.filter(features, function(f) { return f.get('score')>0&&f.get('source')=="G"; })
-            var a_t = array.filter(features, function(f) { return f.get('score')>0&&f.get('source')=="T"; })
-            var c = array.filter(features, function(f) { return f.get('score')<0&&f.get('source')=="counts"; })
-            expect(a_a.length).toEqual(22);
-            expect(a_c.length).toEqual(22);
-            expect(a_g.length).toEqual(22);
-            expect(a_t.length).toEqual(22);
-            expect(c.length).toEqual(22);
+        it('get bigwig values - A', function() {
+          var bwarr = array.filter(features, function(f) { return f.get('score')>0&&f.get('source')=="A"; })
+          expect(bwarr.length).toEqual(538);
+        });
+        it('get bigwig values - C', function() {
+          var bwarr = array.filter(features, function(f) { return f.get('score')>0&&f.get('source')=="C"; })
+          expect(bwarr.length).toEqual(741);
+        });
+        it('get bigwig values - G', function() {
+          var bwarr = array.filter(features, function(f) { return f.get('score')>0&&f.get('source')=="G"; })
+          expect(bwarr.length).toEqual(964);
+        });
+        it('get bigwig values - T', function() {
+          var bwarr = array.filter(features, function(f) { return f.get('score')>0&&f.get('source')=="T"; })
+          expect(bwarr.length).toEqual(1365);
+        });
+        it('get bigwig values - Counts', function() {
+          var bwarr = array.filter(features, function(f) { return f.get('score')>0&&f.get('source')=="counts"; })
+          expect(bwarr.length).toEqual(1188);
         });
 
     });

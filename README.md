@@ -1,7 +1,17 @@
 # ProportionalMultiBw
 JBrowse plugin to display multiple BigWig tracks as a stacked proportion of depth.
 
+| Master | Dev |
+|---|---|
+| [![Build Status](https://travis-ci.org/cancerit/proportionalmultibw.svg?branch=master)](https://travis-ci.org/cancerit/proportionalmultibw) |  [![Build Status](https://travis-ci.org/cancerit/proportionalmultibw.svg?branch=develop)](https://travis-ci.org/cancerit/proportionalmultibw) |
+
 `ProportionalMultiBw` is based on [MultiBigWig](https://github.com/elsiklab/multibigwig).  Significant credit and thanks are due to [Colin Daiesh](https://github.com/cmdcolin) for help and guidance.
+
+--
+
+#Associated software
+
+Data files for use in this tool can be generated using the C package [cgpBigWig](https://github.com/cancerit/cgpBigWig).
 
 --
 

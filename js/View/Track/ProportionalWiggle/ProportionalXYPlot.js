@@ -92,7 +92,9 @@ function(
 
               var ratio = Util.getResolution(context, bConfig.highResolutionMode);
               var toY = lang.hitch(this, function(val) {
-                return canvasHeight * (1 - dataScale.normalize(val)) / ratio;
+                var norm = 0;
+                if(val > 0) norm =  dataScale.normalize(val);
+                return canvasHeight * (1 - norm) / ratio;
               });
 
               var colors = {};
@@ -105,7 +107,7 @@ function(
               // iterate over pixels (scale pixels per base)
               array.forEach(pixels, function(p, i) {
                 var stack = [];
-                var counts;
+                var counts = 0;
                 // iterate over stores
                 array.forEach(p, function(s) {
                   if (!s) return;

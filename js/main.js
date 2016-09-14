@@ -8,7 +8,8 @@ function(
 ) {
   return declare(JBrowsePlugin, {
     constructor: function(/* args */) {
-      console.log('ProporitonalMultiBw plugin starting');
+      var version = "1.0.0";
+      console.log('ProporitonalMultiBw plugin starting, version: '+version);
     }
   });
 });

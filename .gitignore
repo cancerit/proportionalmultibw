@@ -1,0 +1,16 @@
+/test/FileSaver/
+/test/dbind/
+/test/dgrid/
+/test/dijit/
+/test/dojo
+/test/dojox/
+/test/jDataView/
+/test/jasmine-core/
+/test/jbrowse/
+/test/json-schema/
+/test/jszlib/
+/test/lazyload/
+/test/put-selector/
+/test/util/
+/test/xstyle/
+

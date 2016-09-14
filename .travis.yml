@@ -1,0 +1,24 @@
+sudo: false
+
+cache:
+  directories:
+  - $HOME/.cache/bower
+
+language: node_js
+
+node_js:
+ - node
+
+install:
+  - npm install -g eslint eslint-plugin-react babel-eslint bower phantomjs-prebuilt
+  - pip install --user RangeHTTPServer
+  - bower install
+
+before_script:
+  - python -m RangeHTTPServer &
+
+script:
+  - phantomjs test/run-jasmine.js http://localhost:8000/test/
+
+after_script:
+  - eslint js

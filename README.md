@@ -46,44 +46,44 @@ Allele stacks are only rendered if the position matches reference below the defa
 ```js
 {
   // standard Wiggle options
-  "storeClass" : "ProportionalMultiBw/Store/SeqFeature/ProportionalMultiBw",
-  "type" : "ProportionalMultiBw/View/Track/ProportionalWiggle/ProportionalXYPlot",
-  "label" : "ProportionalMultiBw-XY",
-  "scale": "linear",
-  "yScalePosition": "right",
-  // content of urlTemplates matched against ref
-  "matchRef" : true,
+  "storeClass"     : "ProportionalMultiBw/Store/SeqFeature/ProportionalMultiBw",
+  "type"           : "ProportionalMultiBw/View/Track/ProportionalWiggle/ProportionalXYPlot",
+  "label"          : "ProportionalMultiBw-XY",
+  "scale"          : "linear",
+  "yScalePosition" : "right",
+  // content of ACGT urlTemplates matched against ref
+  "matchRef"       : true,
   // Stacks hidden if reference allele exceeds this fraction
-  "maxRefFrac": 0.9,
-  // Data for raw count, e.g. total sequencing depth
-  "counts" : {
-    "color" : "black",
-    "urlTemplate" : "bw/SAMPLE.bam.bw",
-    "name" : "counts"
-  },
-  // Data files for allele fractions
-  "urlTemplates" : [
-    { "url" : "bw/A.SAMPLE.bam.bw",
-      "name" : "A",
-      "color" : "#00BF00"
-    },
-    { "url" : "bw/C.SAMPLE.bam.bw",
-      "name" : "C",
-      "color" : "#4747ff"
-    },
-    { "url" : "bw/G.SAMPLE.bam.bw",
-      "name" : "G",
-      "color" : "#d5bb04"
-    },
-    { "url" : "bw/T.SAMPLE.bam.bw",
-      "name" : "T",
-      "color" : "#f00"
-    }
-  ],
+  "maxRefFrac"     : 0.9,
   // Optional labels to apply to mouseovers, falls back to 'name'
   "labels" : {
-    "counts": "Depth"
+    "counts"       : "Depth"
   },
+  "urlTemplates"   : [
+    // Data for raw count, e.g. total sequencing depth
+    // MUST be present
+  	  { "url"  : "bw/SAMPLE.bam.bw",
+       "name"  : "counts",
+       "color" : "black"
+     },
+     // Data files for allele fractions
+     { "url"   : "bw/A.SAMPLE.bam.bw",
+       "name"  : "A",
+       "color" : "#00BF00"
+     },
+     { "url"   : "bw/C.SAMPLE.bam.bw",
+       "name"  : "C",
+       "color" : "#4747ff"
+     },
+     { "url"   : "bw/G.SAMPLE.bam.bw",
+       "name"  : "G",
+       "color" : "#d5bb04"
+     },
+     { "url"   : "bw/T.SAMPLE.bam.bw",
+       "name"  : "T",
+       "color" : "#f00"
+     }
+  ]
 }
 ```
 
@@ -119,27 +119,27 @@ Changes to the config would be along the lines:
 ```js
 {
   ...
+  // Disable matching of non 'count' data against reference.
   "matchRef" : false,
-  "counts" : {
-    "color" : "black",
-    "urlTemplate" : "bw/donors_screened.bw",
-    "name" : "counts"
-  },
   // Data files for allele fractions
   "urlTemplates" : [
-    { "url" : "bw/pos.bw",
-      "name" : "pos",
+    { "url"   : "bw/donors_screened.bw",
+      "name"  : "counts",
+      "color" : "black"
+  	 },
+    { "url"   : "bw/pos.bw",
+      "name"  : "pos",
       "color" : "#00BF00"
     },
-    { "url" : "bw/neg.bw",
-      "name" : "neg",
+    { "url"   : "bw/neg.bw",
+      "name"  : "neg",
       "color" : "#4747ff"
     },
   ],
   "labels" : {
     "counts" : "Screened",
-    "pos" : "+ve",
-    "neg" : "-ve",
+    "pos"    : "+ve",
+    "neg"    : "-ve",
   }
   ...
 }

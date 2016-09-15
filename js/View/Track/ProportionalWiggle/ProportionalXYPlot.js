@@ -72,7 +72,15 @@ function(
       var context = canvas.getContext('2d');
       var bConfig = this.browser.config;
       var canvasHeight = canvas.height;
-      var lineColor = thisB.config.counts.color;
+
+      var lineColor;
+      var urlTmp = thisB.config.urlTemplates;
+      for(var i=0; i<urlTmp.length; i++) {
+        if(urlTmp[i].name === 'counts') {
+          lineColor = urlTmp[i].color;
+          break;
+        }
+      }
 
       if(scale < 1) {
         var background = new Image();

@@ -25,10 +25,6 @@ function(
         return new BigWig(dojo.mixin(args, { urlTemplate: urlTemplate.url, name: urlTemplate.name}));
       });
 
-      if(args.hasOwnProperty('counts')) {
-        this.stores.push(new BigWig(dojo.mixin(args, { urlTemplate: args.counts.urlTemplate, name: 'counts', key: args.counts.key })));
-      }
-
       all(array.map(this.stores, function(store) {
         return store._deferred.features;
       })).then(function() {

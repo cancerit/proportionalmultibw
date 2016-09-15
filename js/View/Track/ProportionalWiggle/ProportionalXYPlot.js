@@ -24,6 +24,7 @@ function(
     _defaultConfig: function() {
       return Util.deepUpdate(lang.clone(this.inherited(arguments)), {
         autoscale: 'local',
+        chunkSizeLimit: 500000,
         maxRefFrac: 0.9,
         matchRef: true,
         yScalePosition: 'right',

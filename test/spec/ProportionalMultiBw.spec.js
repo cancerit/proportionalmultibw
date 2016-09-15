@@ -56,12 +56,12 @@ function(
         var store = new ProportionalMultiBwStore({
             browser: new Browser({unitTestMode: true}),
             urlTemplates: [
-                {"color": "#00BF00","url": "../data/A.volvox-proportionalMultiBw.bw","name": "A"},
-                {"color": "#4747ff","url": "../data/C.volvox-proportionalMultiBw.bw","name": "C"},
-                {"color": "#d5bb04","url": "../data/G.volvox-proportionalMultiBw.bw","name": "G"},
-                {"color": "#f00","url": "../data/T.volvox-proportionalMultiBw.bw","name": "T"},
-            ],
-            counts: { "name": "counts","color": "black","urlTemplate": "../data/volvox-proportionalMultiBw.bw" }
+                {"color": "black",   "url": "../data/volvox-proportionalMultiBw.bw",   "name": "counts"},
+                {"color": "#00BF00", "url": "../data/A.volvox-proportionalMultiBw.bw", "name": "A"},
+                {"color": "#4747ff", "url": "../data/C.volvox-proportionalMultiBw.bw", "name": "C"},
+                {"color": "#d5bb04", "url": "../data/G.volvox-proportionalMultiBw.bw", "name": "G"},
+                {"color": "#f00",    "url": "../data/T.volvox-proportionalMultiBw.bw", "name": "T"},
+            ]
         });
 
         var features = [];

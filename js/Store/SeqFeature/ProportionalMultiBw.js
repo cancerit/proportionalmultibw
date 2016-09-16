@@ -43,6 +43,10 @@ function(
         }
       };
       array.forEach(this.stores, function(store) {
+        if(store.name !== 'counts' && store.browser.view.pxPerBp < 1) {
+          finishCallback();
+          return;
+        }
         store._getFeatures(query,
           featureCallback, finishCallback, errorCallback
         );
@@ -66,6 +70,10 @@ function(
         }
       };
       array.forEach(this.stores, function(store) {
+        if(store.name !== 'counts' && store.browser.view.pxPerBp < 1) {
+          finishCallback();
+          return;
+        }
         store._getGlobalStats(finishCallback, errorCallback);
       });
     },
@@ -74,18 +82,24 @@ function(
       var finished = 0;
       var stats = { scoreMin: 100000000, scoreMax: -10000000 };
 
-      var finishCallback = function(t) {
-        if (t.scoreMin < stats.scoreMin) {
-          stats.scoreMin = t.scoreMin;
-        }
-        if (t.scoreMax > stats.scoreMax) {
-          stats.scoreMax = t.scoreMax;
+      var finishCallback = function(t, noscore) {
+        if(!noscore) {
+          if (t.scoreMin < stats.scoreMin) {
+            stats.scoreMin = t.scoreMin;
+          }
+          if (t.scoreMax > stats.scoreMax) {
+            stats.scoreMax = t.scoreMax;
+          }
         }
         if (thisB.stores.length === ++finished) {
           successCallback(stats);
         }
       };
       array.forEach(this.stores, function(store) {
+        if(store.name !== 'counts' && store.browser.view.pxPerBp < 1) {
+          finishCallback(true);
+          return;
+        }
         store.getRegionStats(query, finishCallback, errorCallback);
       });
     },

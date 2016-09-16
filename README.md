@@ -106,7 +106,7 @@ E.g. modified to 0.92:
 
 ![ProportionalXYPlot max fraction 0.92](img/maxFrac92pct.png)
 
-Zooming out to less than 1px per b.p. results in the allele fraction stacks being disabled:
+Zooming out to less than 1px per b.p. results in the fraction stacks being disabled:
 
 ![ProportionalXYPlot less than 1 px per b.p.](img/lt1pxPerBp.png)
 

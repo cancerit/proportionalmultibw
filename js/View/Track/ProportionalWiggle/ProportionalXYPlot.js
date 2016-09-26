@@ -156,7 +156,7 @@ function(
                     if(source === 'counts') {
                       counts = score;
                     }
-                    else {
+                    else if (score > 0) {
                       stack.push({'allele': source, 'raw': score, 'refBase': refBases[f.get('start') - leftBase]});
                     }
                   }, this);

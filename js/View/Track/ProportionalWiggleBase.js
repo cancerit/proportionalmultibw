@@ -74,27 +74,11 @@ function(
       var options = this.inherited(arguments);
       var track = this;
       options.push({
-        label: 'Autoscale global',
-        onClick: function() {
-          track.config.autoscale = 'global';
-          track.browser.publish('/jbrowse/v1/v/tracks/replace', [track.config]);
-        }
-      });
-      options.push({
-        label: 'Autoscale local',
-        onClick: function() {
-          track.config.autoscale = 'local';
-          track.config.max_score = null;
-          track.browser.publish('/jbrowse/v1/v/tracks/replace', [track.config]);
-        }
-      });
-      options.push({
         label: 'Set max reference fraction',
         onClick: function() {
           new MaxRefFracDialog({
             setCallback: function(filterInt) {
               track.config.maxRefFrac = filterInt;
-              track.config.autoscale = 'global';
               track.browser.publish('/jbrowse/v1/c/tracks/replace', [track.config]);
             },
             maxRefFrac: track.config.maxRefFrac || 0.9

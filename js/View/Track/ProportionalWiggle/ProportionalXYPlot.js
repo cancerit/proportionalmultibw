@@ -85,7 +85,7 @@ function(
 
       if(scale < 1) {
         var background = new Image();
-        background.src = bConfig.baseUrl + bConfig.plugins.ProportionalMultiBw.location + '/img/zoom_in.png';
+        background.src = bConfig.baseUrl + 'plugins/ProportionalMultiBw/img/zoom_in.png';
         context.drawImage(background,0,parseInt((canvasHeight/2)-10));
       }
 

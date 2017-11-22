@@ -1,15 +1,10 @@
 define([
-  'dojo/_base/declare',
-  'JBrowse/Plugin'
-],
-function(
-   declare,
-   JBrowsePlugin
-) {
+  'dojo/_base/declare', 'JBrowse/Plugin'
+], function(declare, JBrowsePlugin) {
   return declare(JBrowsePlugin, {
     constructor: function(/* args */) {
-      var version = "1.0.1";
-      console.log('ProporitonalMultiBw plugin starting, version: '+version);
+      var version = "1.0.4";
+      console.log('ProporitonalMultiBw plugin starting, version: ' + version);
     }
   });
 });

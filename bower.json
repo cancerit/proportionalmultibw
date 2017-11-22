@@ -21,6 +21,6 @@
   ],
   "devDependencies": {
     "jasmine-core": "jasmine#^2.4.1",
-    "jbrowse": "git://github.com/GMOD/jbrowse.git#master"
+    "jbrowse": "git://github.com/GMOD/jbrowse.git#1.12.3-release"
   }
 }

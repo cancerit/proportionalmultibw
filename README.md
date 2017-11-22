@@ -1,23 +1,36 @@
 # ProportionalMultiBw
+
 JBrowse plugin to display multiple BigWig tracks as a stacked proportion of depth.
 
-| Master | Dev |
-|---|---|
-| [![Build Status](https://travis-ci.org/cancerit/proportionalmultibw.svg?branch=master)](https://travis-ci.org/cancerit/proportionalmultibw) |  [![Build Status](https://travis-ci.org/cancerit/proportionalmultibw.svg?branch=develop)](https://travis-ci.org/cancerit/proportionalmultibw) |
+[![Build Status](https://travis-ci.org/cancerit/proportionalmultibw.svg?branch=master)](https://travis-ci.org/cancerit/proportionalmultibw) : master
+[![Build Status](https://travis-ci.org/cancerit/proportionalmultibw.svg?branch=develop)](https://travis-ci.org/cancerit/proportionalmultibw) : develop
 
 `ProportionalMultiBw` is based on [MultiBigWig](https://github.com/elsiklab/multibigwig).  Significant credit and thanks are due to [Colin Daiesh](https://github.com/cmdcolin) for help and guidance.
 
---
+## Install
 
-#Associated software
+Unpack the release into the plugins directory of JBrowse.  The folder must be
+named:
+
+```
+$JBROWSE_ROOT/plugins/ProportionalMultiBw
+```
+
+After unpack you should be able to see:
+
+```
+$JBROWSE_ROOT/plugins/ProportionalMultiBw/img/zoom_in.png
+```
+
+(sorry, limitations of finding the resource, get in touch if you have a solution)
+
+## Associated software
 
 Data files for use in this tool can be generated using the C package [cgpBigWig](https://github.com/cancerit/cgpBigWig).
 
---
+## Available plots
 
-#Available plots
-
-## ProportionalXYPlot
+### ProportionalXYPlot
 
 `ProportionalXYPlot` provides a track able to read a set of BigWig files to produce a stacked proportion bar plot for each position.
 
@@ -30,14 +43,11 @@ This expects 2 or more BigWig files:
     * Allele fration (4 bw files, A, C, G, T)
     * Patients `+ve`/`-ve` for a kmown somatic mutation
 
-
 The `bw` files for fractional data should not contain `0` values.
 
 Using this set of files an allele stack is rendered proportional to the allele fractions (full height of the track) and the depth overlaid.
 
-
-
-### Configuration - Allele fraction
+#### Configuration - Allele fraction
 
 Allele stacks are only rendered if the position matches reference below the default threshold of `0.9`, this is configurable both in base configuration and via a track menu option.
 
@@ -62,7 +72,7 @@ Allele stacks are only rendered if the position matches reference below the defa
   "urlTemplates"   : [
     // Data for raw count, e.g. total sequencing depth
     // MUST be present
-  	  { "url"  : "bw/SAMPLE.bam.bw",
+     { "url"  : "bw/SAMPLE.bam.bw",
        "name"  : "counts",
        "color" : "black"
      },
@@ -98,6 +108,7 @@ For high depth regions the log scale is preferable:
   ...
 }
 ```
+
 By default only positions with less than 90% match to reference are shown.  A track menu item allows this to be modified:
 
 ![ProportionalXYPlot max fraction dialoge](img/maxFrac.png)
@@ -110,7 +121,7 @@ Zooming out to less than 1px per b.p. results in the fraction stacks being disab
 
 ![ProportionalXYPlot less than 1 px per b.p.](img/lt1pxPerBp.png)
 
-### Configuration - Non-ref matched stacks
+#### Configuration - Non-ref matched stacks
 
 A minor change to the configuration allows stacks to be generated based on presence of data alone rather than how they diverge from reference alleles.  This can be used for population statistics such as comparing the number of patients presenting with a SNP vs. the number screened.
 
@@ -126,7 +137,7 @@ Changes to the config would be along the lines:
     { "url"   : "bw/donors_screened.bw",
       "name"  : "counts",
       "color" : "black"
-  	 },
+    },
     { "url"   : "bw/pos.bw",
       "name"  : "pos",
       "color" : "#00BF00"
@@ -145,13 +156,14 @@ Changes to the config would be along the lines:
 }
 ```
 
-## ProportionalDensity
+### ProportionalDensity
 
 At present this has not been modified from the original base taken from [https://github.com/elsiklab/multibigwig](MultiBigWig).  The intent is to give a produce a single density plot showing hotspots of divergence from reference.
 
 --
 
-# Why?
+## Why?
+
 Over the last few years it has been common to generate whole genome sequencing (WGS) data
 around 30-50x deep.  Even standard whole exome sequencing (WXS) is rarely over 100x and
 JBrowse can display these reasonably well.
@@ -162,3 +174,41 @@ with depth in the 1000s causing visualisation of the profile of errors/mutations
 Even in WGS, due to the new XTen Illumina machines, more high depth experiments are being run to detect
 improve sensitivity to subclonal events in cancer genomes.
 
+
+## Preparing a release
+
+### Testing
+
+Testing is performed using jasmine:
+
+As per `.travis.yml` install the necessary tools
+
+```
+npm install -g eslint eslint-plugin-react babel-eslint bower phantomjs-prebuilt
+pip install --user RangeHTTPServer
+bower install
+```
+
+Start a simple web-server:
+
+```
+python -m RangeHTTPServer&
+```
+
+Run the tests:
+
+```
+phantomjs test/run-jasmine.js http://localhost:8000/test/
+```
+
+Don't forget to kill off the server (`fg` then `Ctrl-C`)
+
+### Release
+
+* Ensure any changes to documentation are complete.
+* Bump the version number in `js/main.js`.
+* Edit CHANGES.md.
+* Push to github and with for tests to pass.
+  * Fix if tests fail.
+  * Version of JBrowse is hard coded in `bower.json` due to master branch being volatile.
+* Raise merge request or finish hotfix.

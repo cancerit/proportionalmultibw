@@ -5,15 +5,7 @@ define([
   'ProportionalMultiBw/View/Track/ProportionalWiggleBase',
   'JBrowse/Util',
   'dijit/Tooltip'
-],
-function(
-  declare,
-  array,
-  Color,
-  ProportionalWiggleBase,
-  Util,
-  Tooltip
-) {
+], function(declare, array, Color, ProportionalWiggleBase, Util, Tooltip) {
   return declare(ProportionalWiggleBase, {
 
     _defaultConfig: function() {
@@ -33,8 +25,9 @@ function(
       var thisB = this;
       var context = canvas.getContext('2d');
       var canvasHeight = canvas.height;
-      var featureColor = typeof this.config.style.color === 'function' ? this.config.style.color :
-        (function() { // default color function uses conf variables
+      var featureColor = typeof this.config.style.color === 'function'
+        ? this.config.style.color
+        : (function() { // default color function uses conf variables
           var disableClipMarkers = thisB.config.disable_clip_markers;
           var normOrigin = dataScale.normalize(dataScale.origin);
 
@@ -45,12 +38,15 @@ function(
             if (disableClipMarkers || n <= 1 && n >= 0) {
               ret = Color.blendColors(
                 new Color(thisB.getConfForFeature('style.bg_color', feature)),
-                new Color(thisB.getConfForFeature(n >= normOrigin ? 'style.pos_color' : 'style.neg_color', feature)),
-                Math.abs(n - normOrigin)
-              ).toString();
+                new Color(
+                  thisB.getConfForFeature(
+                    n >= normOrigin ? 'style.pos_color' : 'style.neg_color'
+                    ,feature)), Math.abs(n - normOrigin)).toString();
             } else {
-              ret = (n > 1 ? thisB.getConfForFeature('style.pos_color', feature)
-                     : thisB.getConfForFeature('style.neg_color', feature));
+              ret = (
+                n > 1
+                  ? thisB.getConfForFeature('style.pos_color', feature)
+                  : thisB.getConfForFeature('style.neg_color', feature));
             }
             return ret;
           };
@@ -85,12 +81,19 @@ function(
             style: {
               position: 'absolute',
               height: (kheight - 1) + 'px',
-              width: thisB.config.showLabels ? (thisB.config.labelWidth ? thisB.config.labelWidth + 'px' : null) : '10px',
+              width: thisB.config.showLabels
+                ? (
+                  thisB.config.labelWidth
+                    ? thisB.config.labelWidth + 'px'
+                    : null)
+                : '10px',
               font: thisB.config.labelFont,
               fontSize: thisB.config.labelFontSize,
               backgroundColor: elt.color
             },
-            innerHTML: thisB.config.showLabels ? elt.name : ''
+            innerHTML: thisB.config.showLabels
+              ? elt.name
+              : ''
           }, thisB.div);
           htmlnode.tooltip = new Tooltip({
             connectId: elt.name,

@@ -173,3 +173,42 @@ with depth in the 1000s causing visualisation of the profile of errors/mutations
 
 Even in WGS, due to the new XTen Illumina machines, more high depth experiments are being run to detect
 improve sensitivity to subclonal events in cancer genomes.
+
+
+## Preparing a release
+
+### Testing
+
+Testing is performed using jasmine:
+
+As per `.travis.yml` install the necessary tools
+
+```
+npm install -g eslint eslint-plugin-react babel-eslint bower phantomjs-prebuilt
+pip install --user RangeHTTPServer
+bower install
+```
+
+Start a simple web-server:
+
+```
+python -m RangeHTTPServer&
+```
+
+Run the tests:
+
+```
+phantomjs test/run-jasmine.js http://localhost:8000/test/
+```
+
+Don't forget to kill off the server (`fg` then `Ctrl-C`)
+
+### Release
+
+* Ensure any changes to documentation are complete.
+* Bump the version number in `js/main.js`.
+* Edit CHANGES.md.
+* Push to github and with for tests to pass.
+  * Fix if tests fail.
+  * Version of JBrowse is hard coded in `bower.json` due to master branch being volatile.
+* Raise merge request or finish hotfix.

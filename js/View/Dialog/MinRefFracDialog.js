@@ -17,10 +17,10 @@ function(
   ActionBarDialog
 ) {
   return declare(ActionBarDialog, {
-    title: 'Set max reference fraction',
+    title: 'Set min reference fraction',
 
     constructor: function(args) {
-      this.maxRefFrac = args.maxRefFrac || 0.9;
+      this.minRefFrac = args.minRefFrac || 0.0;
       this.browser     = args.browser;
       this.setCallback   = args.setCallback || function() {};
       this.cancelCallback  = args.cancelCallback || function() {};
@@ -30,7 +30,7 @@ function(
       new Button({
         label: 'OK',
         onClick: dojo.hitch(this, function() {
-          var height = +this.maxScoreSpinner.getValue();
+          var height = +this.minScoreSpinner.getValue();
           if (isNaN(height)) {
             return;
           }
@@ -49,18 +49,18 @@ function(
     },
 
     show: function(/* callback */) {
-      dojo.addClass(this.domNode, 'maxRefFracDialog');
+      dojo.addClass(this.domNode, 'minRefFracDialog');
 
-      this.maxScoreSpinner = new NumberSpinner({
-        value: this.maxRefFrac,
+      this.minScoreSpinner = new NumberSpinner({
+        value: this.minRefFrac,
         smallDelta: 0.01,
         constraints: {min:0, max:1}
       });
 
       this.set('content', [
-        dom.create('label', { 'for': 'max_ref_frac', innerHTML: '' }),
-        this.maxScoreSpinner.domNode,
-        dom.create('span', { innerHTML: ' max ref frac' })
+        dom.create('label', { 'for': 'min_ref_frac', innerHTML: '' }),
+        this.minScoreSpinner.domNode,
+        dom.create('span', { innerHTML: ' min ref frac' })
       ]);
 
       this.inherited(arguments);

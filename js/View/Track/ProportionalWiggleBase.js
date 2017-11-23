@@ -76,18 +76,6 @@ function(
       var options = this.inherited(arguments);
       var track = this;
       options.push({
-        label: 'Set max reference fraction',
-        onClick: function() {
-          new MaxRefFracDialog({
-            setCallback: function(filterInt) {
-              track.config.maxRefFrac = filterInt;
-              track.browser.publish('/jbrowse/v1/c/tracks/replace', [track.config]);
-            },
-            maxRefFrac: track.config.maxRefFrac || 0.9
-          }).show();
-        }
-      });
-      options.push({
         label: 'Set min reference fraction',
         onClick: function() {
           new MinRefFracDialog({
@@ -96,6 +84,18 @@ function(
               track.browser.publish('/jbrowse/v1/c/tracks/replace', [track.config]);
             },
             minRefFrac: track.config.minRefFrac || 0.0
+          }).show();
+        }
+      });
+      options.push({
+        label: 'Set max reference fraction',
+        onClick: function() {
+          new MaxRefFracDialog({
+            setCallback: function(filterInt) {
+              track.config.maxRefFrac = filterInt;
+              track.browser.publish('/jbrowse/v1/c/tracks/replace', [track.config]);
+            },
+            maxRefFrac: track.config.maxRefFrac || 0.9
           }).show();
         }
       });

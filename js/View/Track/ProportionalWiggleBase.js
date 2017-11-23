@@ -7,8 +7,8 @@ define([
   'dojo/on',
   'dojo/mouse',
   'JBrowse/View/Track/WiggleBase',
-  'ProportionalMultiBw/View/Dialog/MaxRefFracDialog'
-  'ProportionalMultiBw/View/Dialog/MinRefFracDialog',
+  'ProportionalMultiBw/View/Dialog/MaxRefFracDialog',
+  'ProportionalMultiBw/View/Dialog/MinRefFracDialog'
 ],
 function(
   declare,
@@ -19,7 +19,8 @@ function(
   on,
   mouse,
   WiggleBase,
-  MaxRefFracDialog
+  MaxRefFracDialog,
+  MinRefFracDialog
 ) {
   return declare(WiggleBase, {
 

@@ -20,7 +20,7 @@ function(
     title: 'Set min reference fraction',
 
     constructor: function(args) {
-      this.minRefFrac = args.minRefFrac || 0.00;
+      this.minRefFrac = args.minRefFrac || 0.0;
       this.browser     = args.browser;
       this.setCallback   = args.setCallback || function() {};
       this.cancelCallback  = args.cancelCallback || function() {};
@@ -58,7 +58,7 @@ function(
       });
 
       this.set('content', [
-        dom.create('label', { 'for': 'read_depth', innerHTML: '' }),
+        dom.create('label', { 'for': 'min_ref_frac', innerHTML: '' }),
         this.minScoreSpinner.domNode,
         dom.create('span', { innerHTML: ' min ref frac' })
       ]);

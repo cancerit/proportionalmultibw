@@ -51,8 +51,6 @@ Using this set of files an allele stack is rendered proportional to the allele f
 
 Allele stacks are only rendered if the position matches reference below the default threshold of `0.9`, this is configurable both in base configuration and via a track menu option.
 
-Stacks can also be configured to hide when a minimum reference allele fraction is passed.
-
 ![ProportionalXYPlot native scale](img/XY.png)
 
 ```js
@@ -67,8 +65,6 @@ Stacks can also be configured to hide when a minimum reference allele fraction i
   "matchRef"       : true,
   // Stacks hidden if reference allele exceeds this fraction
   "maxRefFrac"     : 0.9,
-  // Stacks hidden if reference allele below this fraction
-  "minRefFrac"     : 0.0,
   // Optional labels to apply to mouseovers, falls back to 'name'
   "labels" : {
     "counts"       : "Depth"

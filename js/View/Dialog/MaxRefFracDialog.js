@@ -20,7 +20,7 @@ function(
     title: 'Set max reference fraction',
 
     constructor: function(args) {
-      this.maxRefFrac = args.maxRefFrac || 0.9;
+      this.maxRefFrac = args.maxRefFrac || 0.95;
       this.browser     = args.browser;
       this.setCallback   = args.setCallback || function() {};
       this.cancelCallback  = args.cancelCallback || function() {};
@@ -58,7 +58,7 @@ function(
       });
 
       this.set('content', [
-        dom.create('label', { 'for': 'max_ref_frac', innerHTML: '' }),
+        dom.create('label', { 'for': 'read_depth', innerHTML: '' }),
         this.maxScoreSpinner.domNode,
         dom.create('span', { innerHTML: ' max ref frac' })
       ]);

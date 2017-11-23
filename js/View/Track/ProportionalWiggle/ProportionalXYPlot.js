@@ -17,7 +17,6 @@ define([
         autoscale: 'local',
         chunkSizeLimit: 500000,
         maxRefFrac: 0.9,
-        minRefFrac: 0.0,
         matchRef: true,
         yScalePosition: 'right',
         scale: 'linear',
@@ -129,7 +128,6 @@ define([
             refBases = seq.split('');
             // the moved bit starts here
             var maxRefFrac = thisB.config.maxRefFrac;
-            var minRefFrac = thisB.config.minRefFrac;
 
             var colors = {};
             var templates = thisB.config.urlTemplates;
@@ -168,7 +166,7 @@ define([
                 var show = false;
                 if (matchRef) {
                   for (var j = 0; j < stack.length; j++) {
-                    if (stack[j].allele === stack[j].refBase && stack[j].raw >= minRefFrac && stack[j].raw <= maxRefFrac) {
+                    if (stack[j].allele === stack[j].refBase && stack[j].raw <= maxRefFrac) {
                       show = true;
                       break;
                     }

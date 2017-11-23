@@ -7,7 +7,8 @@ define([
   'dojo/on',
   'dojo/mouse',
   'JBrowse/View/Track/WiggleBase',
-  'ProportionalMultiBw/View/Dialog/MaxRefFracDialog'
+  'ProportionalMultiBw/View/Dialog/MaxRefFracDialog',
+  'ProportionalMultiBw/View/Dialog/MinRefFracDialog'
 ],
 function(
   declare,
@@ -18,7 +19,8 @@ function(
   on,
   mouse,
   WiggleBase,
-  MaxRefFracDialog
+  MaxRefFracDialog,
+  MinRefFracDialog
 ) {
   return declare(WiggleBase, {
 
@@ -73,6 +75,18 @@ function(
     _trackMenuOptions: function() {
       var options = this.inherited(arguments);
       var track = this;
+      options.push({
+        label: 'Set min reference fraction',
+        onClick: function() {
+          new MinRefFracDialog({
+            setCallback: function(filterInt) {
+              track.config.minRefFrac = filterInt;
+              track.browser.publish('/jbrowse/v1/c/tracks/replace', [track.config]);
+            },
+            minRefFrac: track.config.minRefFrac || 0.0
+          }).show();
+        }
+      });
       options.push({
         label: 'Set max reference fraction',
         onClick: function() {

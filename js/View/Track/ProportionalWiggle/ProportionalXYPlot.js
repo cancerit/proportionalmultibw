@@ -17,6 +17,7 @@ define([
         autoscale: 'local',
         chunkSizeLimit: 500000,
         maxRefFrac: 0.9,
+        minRefFrac: 0.0,
         matchRef: true,
         yScalePosition: 'right',
         scale: 'linear',

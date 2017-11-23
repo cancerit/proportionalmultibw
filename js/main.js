@@ -3,7 +3,7 @@ define([
 ], function(declare, JBrowsePlugin) {
   return declare(JBrowsePlugin, {
     constructor: function(/* args */) {
-      var version = "1.0.4";
+      var version = "1.2.0";
       console.log('ProporitonalMultiBw plugin starting, version: ' + version);
     }
   });

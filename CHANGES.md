@@ -1,8 +1,12 @@
 # CHANGES
 
-## 1.1.0
+## 1.2.0
 
 Adds min reference fraction track option.
+
+## 1.1.0
+
+... ignore ...
 
 ## 1.0.4
 

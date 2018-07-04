@@ -47,8 +47,14 @@ function(
           finishCallback();
           return;
         }
+        var f = (function(name) {
+          return function(feat) {
+            feat.data.source = name;
+            featureCallback(feat);
+          }
+        })(store.name)
         store._getFeatures(query,
-          featureCallback, finishCallback, errorCallback
+          f, finishCallback, errorCallback
         );
       });
     },

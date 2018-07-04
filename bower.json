@@ -21,6 +21,17 @@
   ],
   "devDependencies": {
     "jasmine-core": "jasmine#^2.4.1",
+    "dgrid": "dgrid#^v1.2.1",
+    "dojo": "dojo#^1.13.0",
+    "dijit": "dijit#^1.9.9",
+    "FileSaver": "FileSaver#1.2.0",
+    "dojox": "dojox#^1.9.9",
+    "dojoLoader": "dojo/loader#^2.0.0",
+    "jdataview": "jdataview#^v2.5.0",
+    "lazyload": "lazyload#^v3.2.2",
+    "util": "util#^3.46.1",
+    "xstyle": "xstyle#^v0.3.2",
     "jbrowse": "https://github.com/GMOD/jbrowse/releases/download/1.14.2-release/JBrowse-1.14.2-dev.zip"
-  }
+  },
+  "wibble": "rm -rf FileSaver dbind dgrid dijit dojo dojox jDataView jasmine-core jbrowse json-schema jszlib lazyload put-selector util xstyle"
 }

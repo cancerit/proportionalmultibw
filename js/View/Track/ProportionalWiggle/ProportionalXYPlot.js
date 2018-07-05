@@ -157,7 +157,7 @@ define([
                   stack.push({
                     'allele': source,
                     'raw': score,
-                    'refBase': refBases[f.get('start') - leftBase]
+                    'refBase': refBases[f.get('start') - leftBase].toUpperCase()
                   });
                 }
               }, this);

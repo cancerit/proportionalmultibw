@@ -22,7 +22,7 @@ before_script:
   - python -m RangeHTTPServer &
 
 script:
-  - phantomjs test/run-jasmine.js http://localhost:8000/test/
+  - timeout 180 phantomjs test/run-jasmine.js http://localhost:8000/test/
 
 after_script:
   - eslint js

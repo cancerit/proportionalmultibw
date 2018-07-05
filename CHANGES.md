@@ -1,5 +1,9 @@
 # CHANGES
 
+## 1.3.0
+
+Updates to work with webpack version of JBrowse (1.13+).
+
 ## 1.2.0
 
 Adds min reference fraction track option.

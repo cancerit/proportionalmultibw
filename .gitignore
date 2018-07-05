@@ -2,8 +2,10 @@
 /test/dbind/
 /test/dgrid/
 /test/dijit/
-/test/dojo
+/test/dojo/
+/test/dojoLoader/
 /test/dojox/
+/test/dstore/
 /test/jDataView/
 /test/jasmine-core/
 /test/jbrowse/

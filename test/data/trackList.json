@@ -29,15 +29,15 @@
         "labels": {
           "counts": "Depth"
         },
-        "counts": {
-          "name": "counts",
-          "color": "black",
-          "urlTemplate": "volvox-proportionalMultiBw.bw"
-        },
         "type": "ProportionalMultiBw/View/Track/ProportionalWiggle/ProportionalXYPlot",
         "label": "ProportionalMultiBw-XY",
         "storeClass": "ProportionalMultiBw/Store/SeqFeature/ProportionalMultiBw",
         "urlTemplates": [
+          {
+            "name": "counts",
+            "color": "black",
+            "urlTemplate": "counts.volvox-proportionalMultiBw.bw"
+          },
           {
             "color": "#00BF00",
             "url": "A.volvox-proportionalMultiBw.bw",

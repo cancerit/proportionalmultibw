@@ -154,10 +154,14 @@ define([
                 if (source === 'counts') {
                   counts = score;
                 } else if (score > 0) {
+                  var refbase = refBases[f.get('start') - leftBase];
+                  if(refbase) {
+                    refbase = refbase.toUpperCase()
+                  }
                   stack.push({
                     'allele': source,
                     'raw': score,
-                    'refBase': refBases[f.get('start') - leftBase].toUpperCase()
+                    'refBase': refbase
                   });
                 }
               }, this);

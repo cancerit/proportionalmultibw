@@ -1,5 +1,9 @@
 # CHANGES
 
+## 1.3.1
+
+Fix undefined variable checking
+
 ## 1.3.0
 
 Updates to work with webpack version of JBrowse (1.13+).
